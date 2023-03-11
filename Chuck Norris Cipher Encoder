@@ -1,0 +1,113 @@
+package chucknorris
+
+fun main() {
+    while (true) {
+        println("Please input operation (encode/decode/exit):")
+        val operation: String = readln();
+        
+        if (operation.equals("encode")) {
+            println("Input string:")
+            encode(readln())
+        } else if (operation.equals("decode")) {
+            println("Input encoded string:")
+            decode(readln())
+        } else if (operation.equals("exit")) {
+            println("Bye!")
+            break
+        } else {
+            println("There is no \'$operation\' operation") 
+        }
+    } 
+}
+
+fun encode(input: String) {
+    println("Encoded string:")
+    val binaryDataArray = mutableListOf<String>()
+    for(ch in input){
+        val binaryData: String = Integer.toBinaryString(ch.toInt()).padStart(7, '0')
+        binaryDataArray.add(binaryData)
+    } 
+    var prevCh = 'a'
+    for(data in binaryDataArray){
+        for(ch in data){
+            when(prevCh){
+                'a' -> {
+                    when(ch) {
+                        '0' -> {
+                            print("00 0")
+                            prevCh = ch
+                        }
+                        '1' -> {
+                            print("0 0")
+                            prevCh = ch
+                        }
+                    }
+                }
+                '0',  -> {
+                    when(ch){
+                        '0' -> {
+                            print("0")
+                            prevCh = ch
+                        }
+                        '1' -> {
+                            print(" 0 0")
+                            prevCh = ch
+                        }
+                    }
+                    }
+                '1', -> {
+                    when(ch){
+                        '0' -> {
+                            print(" 00 0")
+                            prevCh = ch
+                        }
+                        '1' -> {
+                            print("0")
+                            prevCh = ch
+                        }
+                    }
+                    }
+            }
+        }
+    }
+    println()
+}
+
+fun decode(input: String) {
+    val inputList = input.split(' ')
+    val regex = Regex("[^0\\s]+")
+    val containsOtherChars = regex.containsMatchIn(input)
+
+    if (inputList.size %2 != 0 || containsOtherChars) {
+        println("Encoded string is not valid.")
+    } else if (inputList[0].equals("0") || inputList[0].equals("00")) {
+        var result = ""
+        var isOne = false
+        var isZero = false
+    
+    if (inputList[0].length == 1) isOne = true else isZero = true
+
+    for (i in 1 until inputList.size step 2){
+        if (inputList[i-1].equals("0")) {
+            result += inputList[i].replace('0','1')
+        }else if(inputList[i-1].equals("00")) {
+            result += inputList[i]
+        } else {
+            result = "0"
+        }
+    }
+    
+    if (result.length %7 == 0) {
+            val chunkedList = result.chunked(7)
+            var dataValue = ""
+        try{
+            for (str in chunkedList){
+               dataValue += Integer.parseInt(str,2).toChar()
+        	}
+        } catch (e: Exception) {
+            println("Encoded string is not valid.")
+        }
+        println("Decoded string:\n$dataValue")
+        } else println("Encoded string is not valid.")
+    } else println("Encoded string is not valid.")
+}
