@@ -1,0 +1,57 @@
+package chucknorris
+
+fun main() {
+    println("Input string:")
+    val input: String = readln();
+    println("The result:")
+    val binaryDataArray = mutableListOf<String>()
+    for(ch in input){
+        val binaryData: String = Integer.toBinaryString(ch.toInt()).padStart(7, '0')
+        binaryDataArray.add(binaryData)
+    } 
+    var prevCh = 'a'
+    for(data in binaryDataArray){
+        for(ch in data){
+            when(prevCh){
+                'a' -> {
+                    when(ch) {
+                        '0' -> {
+                            print("00 0")
+                            prevCh = ch
+                        }
+                        '1' -> {
+                            print("0 0")
+                            prevCh = ch
+                        }
+                    }
+                }
+                '0',  -> {
+                    when(ch){
+                        '0' -> {
+                            print("0")
+                            prevCh = ch
+                        }
+                        '1' -> {
+                            print(" 0 0")
+                            prevCh = ch
+                        }
+                    }
+                    }
+                '1', -> {
+                    when(ch){
+                        '0' -> {
+                            print(" 00 0")
+                            prevCh = ch
+                        }
+                        '1' -> {
+                            print("0")
+                            prevCh = ch
+                        }
+                    }
+                    }
+            }
+        }
+    }
+
+    
+}
